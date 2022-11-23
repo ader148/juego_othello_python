@@ -12,7 +12,7 @@ M1 = [
 JuegaMaquina = False
 
 MAX = 1  # maximo 1
-MIN = -1  # minimo 1
+MIN = -1  # minimo -1
 
 
 #este metodo es la funcion de utilidad 
@@ -34,27 +34,21 @@ def optenerPuntajeTablero(M1):
     return puntaje
     
 
-def mostrarMatriz(M1):
-    matrix_length = len(M1)
-    for i in range(matrix_length):
-        print(M1[i])
-        # if(M1[i] == MIN):
-        #    print('X')
-        # else:
-        #    print('0')
-
-
 def verTablero(M1):
+    #print(M1)
     print('----------------------')
 
-    for i in range(len(M1)):
-        for j in range(len(M1[i])):
-            if M1[i][j] == MAX:
+    #for i in range(len(M1)):
+    for i in M1:
+        for j in range(0,len(i)):
+            #if M1[i][j] == MAX:  #max es 1
+            if i[j] == MAX:  #max es 1
                 print('X',end=" ")
-            elif M1[i][j] == MIN:
+            if i[j] == MIN:  #min es -1
                 print('0', end=" ")
-            else:
+            if (i[j] == 0):
                 print('.', end=" ")
+                #print('entra en el punto')
         print('')
 
     print('----------------------')
@@ -65,14 +59,8 @@ def setearJugada(M1, posJugada):
         for j in range(len(M1[i])):
             contador = contador+1
             if (contador == posJugada):
-                #print("se encontro")
-                #print(M1[i][j], end=' ')
-                #print("Se encontro en fila: %s" %i)
-                #print("Se encontro en columna: %s" %j)
-                # seteamos la x en la pocicion que se quiere jugar
-                #M1[i][j] = -1
                 M1[i][j] = 1
-                # print()
+                
 
 def getFila(M1,posJugada):
     contador = 0
@@ -175,25 +163,40 @@ def actulizarTablero(M1,posJugada):
 
     #buscar coincidencia en fila
     varCoincidenciaFila = CoincidenciaFila(M1,FilaElemento)
-    print("esta es la coincidencia en fila")
-    print(varCoincidenciaFila)
+    #print("esta es la coincidencia en fila")
+    #print(varCoincidenciaFila)
     
     #buscar coincidencia en columna
     varCoincidenciaColumna = CoincidenciaColumna(M1,ColumnaElemento)
-    print("esta es la coincidencia en columna")
-    print(varCoincidenciaColumna)
+    #print("esta es la coincidencia en columna")
+    #print(varCoincidenciaColumna)
 
     if(varCoincidenciaFila + varCoincidenciaColumna >= 1):
         if(varCoincidenciaFila >= 1):
             #llamamos actualizar fila
             actualizarFila(M1,FilaElemento)
-        #if(varCoincidenciaColumna >= 1):
+        if(varCoincidenciaColumna >= 1):
             #llamamos actualizar columna
-        #   actualizarColumna(M1,ColumnaElemento)
+            actualizarColumna(M1,ColumnaElemento)
 
-    print("la nueva matriz queda")
-    verTablero(M1)
+    #print("la nueva matriz queda")
+    #verTablero(M1)
 
+# def miniMax(M1):
+#     #i fila
+#     #j columna  
+#     movimientos =[]
+#     for i in range(len(M1)):
+#         for j in range(len(M1[i])):
+#             if M1[i][j] == 0:
+#                 tableroaux = M1[:]
+                
+
+
+
+
+
+    
 
 
 # programa principal
@@ -203,9 +206,9 @@ print("Las casillas 6, 7, 10, 11 estan bloqueadas")
 verTablero(M1)
 
 #optenemos el punaje del tablero inicial
-puntajeTablero = optenerPuntajeTablero(M1)
-print("El puntaje del tablero es: ")
-print(puntajeTablero)  
+#puntajeTablero = optenerPuntajeTablero(M1)
+#print("El puntaje del tablero es: ")
+#print(puntajeTablero)  
 
 #pedimos la posicion de la casilla mientras sea diferente de 6, 7, 10, 11
 while True:
@@ -216,10 +219,14 @@ while True:
 setearJugada(M1, posJugada)
 verTablero(M1)
 actulizarTablero(M1, posJugada)
+verTablero(M1)
 
-puntajeTablero = optenerPuntajeTablero(M1)
-print("El puntaje del tablero es: ")
-print(puntajeTablero)  
+#puntajeTablero = optenerPuntajeTablero(M1)
+#print("El puntaje del tablero es: ")
+#print(puntajeTablero)  
+
+
+#tableroDeMaquina = juegaMaquina(M1)
 
 #calculamos la jugada de la maquina
  
