@@ -153,50 +153,77 @@ def actualizarColumna(M1,numColumna):
                             M1[i+1][j] = 1
 
  
-def actulizarTablero(M1,posJugada):
-    FilaElemento = getFila(M1,posJugada)
+def actulizarTablero(tableroAct,posJugada):
+    FilaElemento = getFila(tableroAct,posJugada)
     #print("esta es la fila del elemento")
     #print(FilaElemento)
-    ColumnaElemento = getColumna(M1,posJugada)
+    ColumnaElemento = getColumna(tableroAct,posJugada)
     #print("esta es la columna del elemento")
     #print(ColumnaElemento)    
 
     #buscar coincidencia en fila
-    varCoincidenciaFila = CoincidenciaFila(M1,FilaElemento)
+    varCoincidenciaFila = CoincidenciaFila(tableroAct,FilaElemento)
     #print("esta es la coincidencia en fila")
     #print(varCoincidenciaFila)
     
     #buscar coincidencia en columna
-    varCoincidenciaColumna = CoincidenciaColumna(M1,ColumnaElemento)
+    varCoincidenciaColumna = CoincidenciaColumna(tableroAct,ColumnaElemento)
     #print("esta es la coincidencia en columna")
     #print(varCoincidenciaColumna)
 
     if(varCoincidenciaFila + varCoincidenciaColumna >= 1):
         if(varCoincidenciaFila >= 1):
             #llamamos actualizar fila
-            actualizarFila(M1,FilaElemento)
+            actualizarFila(tableroAct,FilaElemento)
         if(varCoincidenciaColumna >= 1):
             #llamamos actualizar columna
-            actualizarColumna(M1,ColumnaElemento)
+            actualizarColumna(tableroAct,ColumnaElemento)
 
     #print("la nueva matriz queda")
     #verTablero(M1)
 
-# def miniMax(M1):
-#     #i fila
-#     #j columna  
-#     movimientos =[]
-#     for i in range(len(M1)):
-#         for j in range(len(M1[i])):
-#             if M1[i][j] == 0:
-#                 tableroaux = M1[:]
-                
+def miniMax(M1,jugador):
+    print("esto llego a mimax")
+    verTablero(M1)
+    #print(M1)
+    global jugada_maquina
+    #i fila
+    #j columna
+    contador = 0  
+    movimientos =[]
+    nivelArbol = 0
+
+    if(nivelArbol < 3):
+        for i in range(len(M1)):
+            for j in range(len(M1[i])):
+                nivelArbol = nivelArbol +1
+                contador = contador+1
+                if M1[i][j] == 0:
+                    tableroaux = M1[:]
+                    #seteamos la jugada
+                    setearJugada(tableroaux,contador) #tableroaux[jugada] = jugador
+                    actulizarTablero(tableroaux, contador)
+                    #print("este es el tablero actualizado")
+                    #verTablero(tableroaux)
+                    puntuacion= miniMax(tableroaux, jugador*(-1))
+                    movimientos.append([puntuacion, M1[i][j] ]) #revizar esta parte // movimientos.append([puntuacion, jugada])
+                    #print(movimientos)
+                    
+                    
+        if jugador == MAX:    
+            movimiento = max(movimientos)    
+            jugada_maquina = movimiento[1]
+            return movimiento
+        else:
+            movimiento = min(movimientos)
+            return movimiento[0]
 
 
-
-
-
-    
+def juega_maquina(tablero):
+    global jugada_maquina  
+    punt = miniMax(tablero[:], MAX)
+    tablero[jugada_maquina] = MAX
+    return tablero
 
 
 # programa principal
@@ -229,5 +256,8 @@ verTablero(M1)
 #tableroDeMaquina = juegaMaquina(M1)
 
 #calculamos la jugada de la maquina
+tableroMaquina = juega_maquina(M1)
+#print(tableroMaquina)
+
  
 
