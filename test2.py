@@ -53,13 +53,18 @@ def verTablero(M1):
 
     print('----------------------')
 
-def setearJugada(M1, posJugada):
+def setearJugada(M1, posJugada,juegaLaMaquina):
     contador = 0
     for i in range(len(M1)):
         for j in range(len(M1[i])):
             contador = contador+1
             if (contador == posJugada):
-                M1[i][j] = 1
+                if(juegaLaMaquina):
+                    M1[i][j] = -1
+                    #print("entra en el que es")
+                else:
+                    #print("entra en el que no es")
+                    M1[i][j] = 1
                 
 
 def getFila(M1,posJugada):
@@ -78,7 +83,7 @@ def getColumna(M1,posJugada):
             if (contador == posJugada):
                return j
 
-def CoincidenciaFila(M1,numFila):
+def CoincidenciaFila(M1,numFila,turno):
     #fila i
     #columna j
     contador = 0
@@ -86,7 +91,7 @@ def CoincidenciaFila(M1,numFila):
         for j in range(len(M1[i])):
             if(numFila == i):
                 #contador = contador+1
-                if(JuegaMaquina):
+                if(turno):
                     #buscamos 1
                     if(M1[i][j] == -1):
                         contador = contador + 1
@@ -94,10 +99,11 @@ def CoincidenciaFila(M1,numFila):
                     if (M1[i][j] == 1):
                         contador = contador + 1
 
-    return contador-1
+    return contador
+    #return contador
 
 
-def CoincidenciaColumna(M1,numColumna):
+def CoincidenciaColumna(M1,numColumna,turno):
     #fila i
     #columna j
     contador = 0
@@ -105,7 +111,7 @@ def CoincidenciaColumna(M1,numColumna):
         for j in range(len(M1[i])):
             if(numColumna == j):
                 #contador = contador+1
-                if(JuegaMaquina):
+                if(turno):
                     #buscamos 1
                     if(M1[i][j] == -1):
                         contador = contador + 1
@@ -113,17 +119,18 @@ def CoincidenciaColumna(M1,numColumna):
                     if (M1[i][j] == 1):
                         contador = contador + 1
 
-    return contador-1
+    return contador
+    #return contador
 
 
-def actualizarFila(M1,numFila):
+def actualizarFila(M1,numFila,turno):
     #fila i
     #columna j
     for i in range(len(M1)):
         for j in range(len(M1[i])):
             if(numFila == i):
                 #contador = contador+1
-                if(JuegaMaquina):
+                if(turno):
                     #buscamos 1
                     if( (j+1) < 4):
                         if(M1[i][j] == -1 and M1[i][j+1] == 1 ):
@@ -134,14 +141,14 @@ def actualizarFila(M1,numFila):
                         if (M1[i][j] == 1 and M1[i][j+1] == -1):
                             M1[i][j+1] = 1
 
-def actualizarColumna(M1,numColumna):
+def actualizarColumna(M1,numColumna,turno):
     #fila i
     #columna j
     for i in range(len(M1)):
         for j in range(len(M1[i])):
             if(numColumna == j):
                 #contador = contador+1
-                if(JuegaMaquina):
+                if(turno):
                     #buscamos 1
                     if( (i+1) < 4):
                         if(M1[i][j] == -1 and M1[i+1][j] == 1 ):
@@ -153,7 +160,7 @@ def actualizarColumna(M1,numColumna):
                             M1[i+1][j] = 1
 
  
-def actulizarTablero(tableroAct,posJugada):
+def actulizarTablero(tableroAct,posJugada,turno):
     FilaElemento = getFila(tableroAct,posJugada)
     #print("esta es la fila del elemento")
     #print(FilaElemento)
@@ -162,22 +169,22 @@ def actulizarTablero(tableroAct,posJugada):
     #print(ColumnaElemento)    
 
     #buscar coincidencia en fila
-    varCoincidenciaFila = CoincidenciaFila(tableroAct,FilaElemento)
+    varCoincidenciaFila = CoincidenciaFila(tableroAct,FilaElemento,turno)
     #print("esta es la coincidencia en fila")
     #print(varCoincidenciaFila)
     
     #buscar coincidencia en columna
-    varCoincidenciaColumna = CoincidenciaColumna(tableroAct,ColumnaElemento)
+    varCoincidenciaColumna = CoincidenciaColumna(tableroAct,ColumnaElemento,turno)
     #print("esta es la coincidencia en columna")
     #print(varCoincidenciaColumna)
 
     if(varCoincidenciaFila + varCoincidenciaColumna >= 1):
         if(varCoincidenciaFila >= 1):
             #llamamos actualizar fila
-            actualizarFila(tableroAct,FilaElemento)
+            actualizarFila(tableroAct,FilaElemento,turno)
         if(varCoincidenciaColumna >= 1):
             #llamamos actualizar columna
-            actualizarColumna(tableroAct,ColumnaElemento)
+            actualizarColumna(tableroAct,ColumnaElemento,turno)
 
     #print("la nueva matriz queda")
     #verTablero(M1)
@@ -193,37 +200,93 @@ def miniMax(M1,jugador):
     movimientos =[]
     nivelArbol = 0
 
-    if(nivelArbol < 3):
+    if(jugador == -1):
+        turno = True
+    elif(jugador == 1):
+        turno = False
+
+    if(nivelArbol < 4):
         for i in range(len(M1)):
             for j in range(len(M1[i])):
                 nivelArbol = nivelArbol +1
                 contador = contador+1
                 if M1[i][j] == 0:
                     tableroaux = M1[:]
-                    #seteamos la jugada
-                    setearJugada(tableroaux,contador) #tableroaux[jugada] = jugador
-                    actulizarTablero(tableroaux, contador)
-                    #print("este es el tablero actualizado")
-                    #verTablero(tableroaux)
-                    puntuacion= miniMax(tableroaux, jugador*(-1))
-                    movimientos.append([puntuacion, M1[i][j] ]) #revizar esta parte // movimientos.append([puntuacion, jugada])
-                    #print(movimientos)
+
+                    #miramos si el movimiento es posible antes de enviar al mini max de nuevo
+                    MovimientoPosiblea = MovimientoPosible(tableroaux,contador,turno)
+                    print("el movimiento es posible")
+                    print(MovimientoPosiblea)
+                    #print(not MovimientoPosiblea)
                     
+                    #si el movimiento no es posible busamos el movimiento en la siguiente casilla
+                    if(MovimientoPosiblea):    
+                        #seteamos la jugada
+                        setearJugada(tableroaux,contador,turno) #tableroaux[jugada] = jugador
+                        actulizarTablero(tableroaux, contador,turno)
+                        #print("este es el tablero actualizado")
+                        #verTablero(tableroaux)
+                        puntuacion= miniMax(tableroaux, jugador*(-1))
+                        movimientos.append([puntuacion, M1[i][j] ]) #revizar esta parte // movimientos.append([puntuacion, jugada])
+                        #print(movimientos)
+                    else:
+                        if(getValuePos(tableroaux,contador+1) == 0):
+                            setearJugada(tableroaux,contador+1,turno) #tableroaux[jugada] = jugador
+                            puntuacion= miniMax(tableroaux, jugador)
                     
         if jugador == MAX:    
-            movimiento = max(movimientos)    
-            jugada_maquina = movimiento[1]
-            return movimiento
+            #movimiento = max(movimientos)    
+            #jugada_maquina = movimiento[1]
+            #return movimiento
+            return 1
         else:
-            movimiento = min(movimientos)
-            return movimiento[0]
+            #movimiento = min(movimientos)
+            #return movimiento[0]
+            return 0
+
+
+
+def getValuePos(tablero,poscicion):
+    contador=0
+    for i in range(len(M1)):
+            for j in range(len(M1[i])):
+                contador = contador +1
+                if(contador == poscicion):
+                    return M1[i][j]
+
+                
+
 
 
 def juega_maquina(tablero):
+    JuegaMaquina = True
     global jugada_maquina  
-    punt = miniMax(tablero[:], MAX)
-    tablero[jugada_maquina] = MAX
+    #punt = miniMax(tablero[:], MAX)
+    punt = miniMax(tablero[:], MIN)
+    #tablero[jugada_maquina] = MAX
     return tablero
+
+
+
+def MovimientoPosible(TableroAjugar,movimiento,JuegaMaquina):
+    #print("tablero llego movimeinto posible")
+    #verTablero(TableroAjugar)
+    
+    print("----movimiento------")
+    print(movimiento)
+
+    print("juega maquina")
+    print(JuegaMaquina)
+
+
+    FilaElemento = getFila(TableroAjugar,movimiento)
+    ColumnaElemento = getColumna(TableroAjugar,movimiento)
+    varCoincidenciaFila = CoincidenciaFila(TableroAjugar,FilaElemento,JuegaMaquina)
+    varCoincidenciaColumna = CoincidenciaColumna(TableroAjugar,ColumnaElemento,JuegaMaquina)
+    if(varCoincidenciaFila + varCoincidenciaColumna >= 1):
+        return True
+    else:
+        return False
 
 
 # programa principal
@@ -240,12 +303,13 @@ verTablero(M1)
 #pedimos la posicion de la casilla mientras sea diferente de 6, 7, 10, 11
 while True:
     posJugada = int(input('introduce posicion de la casilla a jugar:'))
-    if(posJugada not in(6,7,10,11)):
+    if(posJugada not in(6,7,10,11) and MovimientoPosible(M1,posJugada,False)):
         break
-    
-setearJugada(M1, posJugada)
+
+turno = False    
+setearJugada(M1, posJugada,turno)
 verTablero(M1)
-actulizarTablero(M1, posJugada)
+actulizarTablero(M1, posJugada,turno)
 verTablero(M1)
 
 #puntajeTablero = optenerPuntajeTablero(M1)
