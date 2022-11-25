@@ -189,14 +189,15 @@ def actulizarTablero(tableroAct,posJugada,turno):
     #print("la nueva matriz queda")
     #verTablero(M1)
 
+contador = 0  
 def miniMax(M1,jugador):
+    global contador
     print("esto llego a mimax")
     verTablero(M1)
     #print(M1)
     global jugada_maquina
     #i fila
     #j columna
-    contador = 0  
     movimientos =[]
     nivelArbol = 0
 
@@ -226,12 +227,14 @@ def miniMax(M1,jugador):
                         actulizarTablero(tableroaux, contador,turno)
                         #print("este es el tablero actualizado")
                         #verTablero(tableroaux)
+                        contador = 0
                         puntuacion= miniMax(tableroaux, jugador*(-1))
                         movimientos.append([puntuacion, M1[i][j] ]) #revizar esta parte // movimientos.append([puntuacion, jugada])
                         #print(movimientos)
                     else:
                         if(getValuePos(tableroaux,contador+1) == 0):
-                            setearJugada(tableroaux,contador+1,turno) #tableroaux[jugada] = jugador
+                            setearJugada(M1,contador+1,turno) #tableroaux[jugada] = jugador
+                            contador = contador +1
                             puntuacion= miniMax(tableroaux, jugador)
                     
         if jugador == MAX:    
@@ -254,10 +257,6 @@ def getValuePos(tablero,poscicion):
                 if(contador == poscicion):
                     return M1[i][j]
 
-                
-
-
-
 def juega_maquina(tablero):
     JuegaMaquina = True
     global jugada_maquina  
@@ -265,8 +264,6 @@ def juega_maquina(tablero):
     punt = miniMax(tablero[:], MIN)
     #tablero[jugada_maquina] = MAX
     return tablero
-
-
 
 def MovimientoPosible(TableroAjugar,movimiento,JuegaMaquina):
     #print("tablero llego movimeinto posible")
