@@ -33,7 +33,7 @@ def optenerPuntajeTablero(M1):
     
     return puntaje
     
-
+#Funcion para mostrar el tablero (simulacion)
 def verTablero(M1):
     #print(M1)
     print('----------------------')
@@ -52,7 +52,7 @@ def verTablero(M1):
         print('')
 
     print('----------------------')
-
+#Funcion para actualizar el tablero
 def setearJugada(M1, posJugada,juegaLaMaquina):
     contador = 0
     for i in range(len(M1)):
@@ -66,7 +66,7 @@ def setearJugada(M1, posJugada,juegaLaMaquina):
                     #print("entra en el que no es")
                     M1[i][j] = 1
                 
-
+#Funcion para obtenre la fila de la jugada
 def getFila(M1,posJugada):
     contador = 0
     for i in range(len(M1)):
@@ -74,7 +74,7 @@ def getFila(M1,posJugada):
             contador = contador+1
             if (contador == posJugada):
                return i
-
+#Funcion para obtener la columna de la jugada
 def getColumna(M1,posJugada):
     contador = 0
     for i in range(len(M1)):
@@ -82,7 +82,7 @@ def getColumna(M1,posJugada):
             contador = contador+1
             if (contador == posJugada):
                return j
-
+#Funcion para verificar si el movimiento es valido (verifica si hay una ficha del contrario)
 def CoincidenciaFila(M1,numFila,turno):
     #fila i
     #columna j
@@ -102,7 +102,7 @@ def CoincidenciaFila(M1,numFila,turno):
     return contador
     #return contador
 
-
+#Funcion para verificar si el movimiento es valido (verifica si hay una ficha del contrario)
 def CoincidenciaColumna(M1,numColumna,turno):
     #fila i
     #columna j
@@ -122,7 +122,7 @@ def CoincidenciaColumna(M1,numColumna,turno):
     return contador
     #return contador
 
-
+#Funcion para actualizar la fila cuando un movimiento es valido
 def actualizarFila(M1,numFila,turno):
     #fila i
     #columna j
@@ -140,7 +140,7 @@ def actualizarFila(M1,numFila,turno):
                     if( (j+1) < 4): #verificamos que no sea mayor para que no se pase el indice
                         if (M1[i][j] == 1 and M1[i][j+1] == -1):
                             M1[i][j+1] = 1
-
+#Funcion para actualizar la columna cuando un movimiento es valido
 def actualizarColumna(M1,numColumna,turno):
     #fila i
     #columna j
@@ -159,7 +159,7 @@ def actualizarColumna(M1,numColumna,turno):
                         if (M1[i][j] == 1 and M1[i+1][j] == -1):
                             M1[i+1][j] = 1
 
- 
+#Funcion para actualizar el tablero y mostrar las jugadas
 def actulizarTablero(tableroAct,posJugada,turno):
     FilaElemento = getFila(tableroAct,posJugada)
     #print("esta es la fila del elemento")
@@ -189,6 +189,7 @@ def actulizarTablero(tableroAct,posJugada,turno):
     #print("la nueva matriz queda")
     #verTablero(M1)
 
+#Funcion de MINIMAX
 contador = 0  
 def miniMax(M1,jugador):
     global contador
@@ -248,7 +249,7 @@ def miniMax(M1,jugador):
             return 0
 
 
-
+#Funcion para obtener una posicion de la jugada
 def getValuePos(tablero,poscicion):
     contador=0
     for i in range(len(M1)):
@@ -256,7 +257,7 @@ def getValuePos(tablero,poscicion):
                 contador = contador +1
                 if(contador == poscicion):
                     return M1[i][j]
-
+#Funcion que simula cuando juega la maquina 
 def juega_maquina(tablero):
     JuegaMaquina = True
     global jugada_maquina  
@@ -264,7 +265,7 @@ def juega_maquina(tablero):
     punt = miniMax(tablero[:], MIN)
     #tablero[jugada_maquina] = MAX
     return tablero
-
+#Funcion que verifica si el movimiento es posible
 def MovimientoPosible(TableroAjugar,movimiento,JuegaMaquina):
     #print("tablero llego movimeinto posible")
     #verTablero(TableroAjugar)
@@ -319,6 +320,5 @@ verTablero(M1)
 #calculamos la jugada de la maquina
 tableroMaquina = juega_maquina(M1)
 #print(tableroMaquina)
-
  
 
